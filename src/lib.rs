@@ -11,12 +11,7 @@
 //! - All top level `use` statements will be hidden in the doctest.
 //!
 //! The files for this example can be found under `/example/` in this
-//! repository. You can run the with;
-//! 
-//! ```bash
-//! cd example
-//! cargo doc --open
-//! ```
+//! repository.
 //!
 //! We use [`file!`]  to provide an example for `my_function` in
 //! `src/doc_with_example.rs`. The example is in `examples/my_example.rs`:
