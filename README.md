@@ -1,4 +1,4 @@
-# include Doc
+# Include Doc
 
 [![tests](https://github.com/simon-bourne/include-doc/actions/workflows/tests.yml/badge.svg)](https://github.com/simon-bourne/include-doc/actions/workflows/tests.yml)
 [![crates.io](https://img.shields.io/crates/v/include-doc.svg)](https://crates.io/crates/include-doc)
