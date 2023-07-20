@@ -215,7 +215,9 @@ fn is_type_dependency(
     dependencies: Option<&HashSet<String>>,
     dependency_tracker: &mut HashSet<String>,
 ) -> bool {
-    let Some(ty) = ty else { return false; };
+    let Some(ty) = ty else {
+        return false;
+    };
 
     ty.syntax()
         .descendants_with_tokens()
@@ -246,13 +248,16 @@ fn is_dependency(
 
 fn extract_function_body(function: &ast::Fn) -> Option<String> {
     function.body().map(|body| {
-        remove_indent(
-            body.to_string()
-                .as_str()
-                .trim()
-                .trim_start_matches('{')
-                .trim_end_matches('}'),
-        ) + "\n"
+        if function.async_token().is_some() {
+            format!("async{body}\n")
+        } else {
+            remove_indent(
+                body.to_string()
+                    .trim()
+                    .trim_start_matches('{')
+                    .trim_end_matches('}'),
+            ) + "\n"
+        }
     })
 }
 
