@@ -11,9 +11,9 @@ readme = "README.md"
 proc-macro = true
 
 [dependencies]
-syn = "1.0.86"
+syn = "2.0.26"
 quote = "1.0.15"
 proc-macro-error = "1.0.4"
-ra_ap_syntax = "0.0.149"
-itertools = "0.10.5"
+ra_ap_syntax = "0.0.164"
+itertools = "0.11.0"
 proc-macro2 = "1.0.50"

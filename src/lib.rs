@@ -64,7 +64,7 @@ use syn::{
     parse::{Parse, ParseStream},
     parse_macro_input,
     token::Comma,
-    Ident, LitStr,
+    Ident, LitStr, Token,
 };
 
 /// Include a Rust file as a doctest.
@@ -112,7 +112,7 @@ impl Parse for FunctionBodyArgs {
         let dependencies;
         bracketed!(dependencies in input);
         let dependencies = dependencies
-            .parse_terminated::<Ident, Comma>(Ident::parse)?
+            .parse_terminated(Ident::parse, Token![,])?
             .into_iter()
             .collect();
 
@@ -171,6 +171,7 @@ fn doc_function_body(
         ast::Item::Trait(item) => include_if_dependency(&item, deps, &mut track_deps),
         ast::Item::TypeAlias(item) => include_if_dependency(&item, deps, &mut track_deps),
         ast::Item::Union(item) => include_if_dependency(&item, deps, &mut track_deps),
+        ast::Item::TraitAlias(item) => include_if_dependency(&item, deps, &mut track_deps),
     });
 
     let doc = parts.collect::<Vec<String>>().join("\n");
