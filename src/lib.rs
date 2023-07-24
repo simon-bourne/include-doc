@@ -250,7 +250,7 @@ fn is_dependency(
 fn extract_function_body(function: &ast::Fn) -> Option<String> {
     function.body().map(|body| {
         if function.async_token().is_some() {
-            format!("async {body}\n")
+            format!("async {body};\n")
         } else {
             remove_indent(
                 body.to_string()
