@@ -6,6 +6,7 @@ license = "MIT OR Apache-2.0"
 description = "Include examples in your Rustdocs."
 keywords = ["documentation", "examples", "rustdoc"]
 readme = "README.md"
+repository = "https://github.com/simon-bourne/include-doc"
 
 [lib]
 proc-macro = true
