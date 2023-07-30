@@ -287,11 +287,7 @@ fn indent_size(text: &str) -> Option<usize> {
 }
 
 fn parse_file(file_expr: &LitStr) -> SourceFile {
-    let file = file_expr.value();
-
-    let dir = env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|e| abort_call_site!(e));
-    let path = Path::new(&dir).join(file);
-    let source_code = fs::read_to_string(path).unwrap_or_else(|e| abort!(file_expr, e));
+    let source_code = read_file(file_expr);
     let parse = SourceFile::parse(&source_code);
     let source = parse.tree();
 
@@ -300,6 +296,14 @@ fn parse_file(file_expr: &LitStr) -> SourceFile {
     }
 
     source
+}
+
+fn read_file(file_expr: &LitStr) -> String {
+    let file = file_expr.value();
+
+    let dir = env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|e| abort_call_site!(e));
+    let path = Path::new(&dir).join(file);
+    fs::read_to_string(path).unwrap_or_else(|e| abort!(file_expr, e))
 }
 
 fn hide_in_doc(item: impl Display) -> String {
