@@ -21,10 +21,9 @@
 //! ## Using [`function_body!`]
 //!
 //! [`function_body!`] is similar to [`file!`], but allows us to specify which
-//! function body we want to use as the doctest. This is useful to reduce
-//! boilerplate for imports or supporting code, as we can put many
-//! examples in one file. We can also specify which parts of the supporting
-//! code to include.
+//! function body to use as the doctest. This reduces boilerplate for imports
+//! and supporting code, as we can put many examples in one file. We can
+//! also specify which parts of the supporting code to include.
 //!
 //! Usage is:
 //! ```
@@ -35,9 +34,9 @@
 //! );
 //! ```
 //! 
-//! In the `tests/doc.rs`, we've put 2 examples for very basic usage of `println!`,
-//! in `my_first_example` and `my_second_example`. There's 2 different setup
-//! functions, but both use `MyStruct`. Here's the contents of `tests/doc.rs`:
+//! In `tests/doc.rs`, we've put 2 examples, `my_first_example` and `my_second_example`.
+//! There are 2 different setup functions, but both use `MyStruct`. Here's the contents of
+//! `tests/doc.rs`:
 //! ```
 #![doc = include_str!("../tests/doc.rs")]
 //! ```
