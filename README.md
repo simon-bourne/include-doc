@@ -7,10 +7,10 @@
 
 Include examples in your Rustdocs.
 
-This crate allows you to include example files in Rustdoc.
-
 ## Features
 
-- Write and maintain your examples in a normal Rust file, with full editor support. See [this example](https://github.com/simon-bourne/include-doc/blob/v0.0.2/example/src/doc_with_example.rs).
+- Write and maintain your examples in a normal Rust file, with full editor support.
 - Automatically hide imports.
-- Put many examples into one file, avoiding duplicated boilerplate for setup code. See [this example](https://github.com/simon-bourne/include-doc/blob/v0.0.2/example/src/doc_with_tests.rs).
+- Put many examples into one file, and choose the parts of the file to include. This helps avoid duplicated boilerplate for imports and setup code.
+
+See the crate docs for examples.
