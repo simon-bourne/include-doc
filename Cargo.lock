@@ -112,6 +112,13 @@ checksum = "2c6201b9ff9fd90a5a3bac2e56a830d0caa509576f0e503818ee82c181b3437a"
 name = "include-doc"
 version = "0.1.2"
 dependencies = [
+ "include-doc-macro",
+]
+
+[[package]]
+name = "include-doc-macro"
+version = "0.1.2"
+dependencies = [
  "itertools 0.11.0",
  "proc-macro-error",
  "proc-macro2",

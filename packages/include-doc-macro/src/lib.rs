@@ -1,53 +1,3 @@
-//! Include Rust source files as doctests.
-//!
-//! # Examples
-//!
-//! ## Using [`file!`]
-//!
-//! [`file!`] lets you include an example source file as a doctest. It does 2
-//! things:
-//!
-//! - `fn main()` will be stripped from the file.
-//! - All top level `use` statements will be hidden in the doctest.
-//!
-//! The files for this example can be found under `/example/` in this
-//! repository.
-//!
-//! We use [`file!`]  to provide an example for `my_function` in
-//! `src/doc_with_example.rs`. The example is in `examples/my_example.rs`:
-//!
-//! ```ignore
-#![doc = include_str!("../example/examples/my_example.rs")]
-//! ```
-//! 
-//! In `src/doc_with_example.rs`, we add a doc comment to `my_function` where we
-//! include the example using [`file!`]:
-//! ```ignore
-#![doc = include_str!("../example/src/doc_with_example.rs")]
-//! ```
-//! 
-//! ## Using [`function_body!`]
-//!
-//! [`function_body!`] is similar to [`file!`], but allows you to specify which
-//!  function body you want to use as the doctest. This is useful if you want
-//!  to reduce boilerplate for imports or supporting code, as you can put many
-//!  examples in one file. You can also specify which parts of the supporting
-//!  code to include.
-//!
-//! Usage is:
-//! ```ignore
-//! include_doc::function_body!(
-//!     filename,
-//!     function_name,
-//!     [fn_dependency, StructDependency, ...]
-//! );
-//! ```
-//! 
-//! In `src/doc_with_tests.rs`, we add a doc comment to `my_function` where we
-//! include the example using [`function_body!`]:
-//! ```ignore
-#![doc = include_str!("../example/src/doc_with_tests.rs")]
-//! ```
 use std::{collections::HashSet, env, fmt::Display, fs, path::Path};
 
 use itertools::Itertools;
@@ -67,9 +17,6 @@ use syn::{
     Ident, LitStr, Token,
 };
 
-/// Include a Rust file as a doctest.
-///
-/// See [module][self] documentation.
 #[proc_macro]
 #[proc_macro_error]
 pub fn file(input: TokenStream) -> TokenStream {
@@ -78,9 +25,6 @@ pub fn file(input: TokenStream) -> TokenStream {
     doc_function_body(file, Ident::new("main", Span::call_site()), None)
 }
 
-/// Include the function body from a Rust file as a doctest.
-///
-/// See [module][self] documentation.
 #[proc_macro]
 #[proc_macro_error]
 pub fn function_body(input: TokenStream) -> TokenStream {
