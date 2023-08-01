@@ -19,7 +19,7 @@ use syn::{
 
 #[proc_macro]
 #[proc_macro_error]
-pub fn file(input: TokenStream) -> TokenStream {
+pub fn source_file(input: TokenStream) -> TokenStream {
     let file: LitStr = parse_macro_input!(input);
 
     doc_function_body(file, Ident::new("main", Span::call_site()), None)

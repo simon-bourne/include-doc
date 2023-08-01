@@ -2,25 +2,25 @@
 //!
 //! # Examples
 //!
-//! ## Using [`file!`]
+//! ## Using [`source_file!`]
 //!
 //! We'll write our example in the file `examples/my_example.rs`, and use
-//! [`file!`] to add the example to our documentation. The contents of
+//! [`source_file!`] to add the example to our documentation. The contents of
 //! `examples/my_example.rs` are:
 //!
 //! ```
 #![doc = include_str!("../examples/my_example.rs")]
 //! ```
 //! 
-//! Using `#[doc = file!("examples/my_example.rs")]` will hide imports and
+//! Using `#[doc = source_file!("examples/my_example.rs")]` will hide imports and
 //! include the body of the main function, leaving us with:
 //! ```
-#![doc = file!("examples/my_example.rs")]
+#![doc = source_file!("examples/my_example.rs")]
 //! ```
 //! 
 //! ## Using [`function_body!`]
 //!
-//! [`function_body!`] is similar to [`file!`], but allows us to specify which
+//! [`function_body!`] is similar to [`source_file!`], but allows us to specify which
 //! function body to use as the doctest. This reduces boilerplate for imports
 //! and supporting code, as we can put many examples in one file. We can
 //! also specify which parts of the supporting code to include.
@@ -56,11 +56,11 @@
 #![doc = function_body!("tests/doc.rs", my_second_example, [MyStruct, setup_second_example])]
 //! ```
 
-/// Include a Rust file as a doctest.
-///
-/// See [module][self] documentation.
-pub use include_doc_macro::file;
 /// Include the function body from a Rust file as a doctest.
 ///
 /// See [module][self] documentation.
 pub use include_doc_macro::function_body;
+/// Include a Rust file as a doctest.
+///
+/// See [module][self] documentation.
+pub use include_doc_macro::source_file;
