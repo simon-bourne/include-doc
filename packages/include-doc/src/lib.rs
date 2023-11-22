@@ -1,3 +1,5 @@
+#![no_std]
+
 //! Include Rust source files as doctests.
 //!
 //! # Examples
