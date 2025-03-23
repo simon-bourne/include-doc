@@ -12,3 +12,6 @@ readme = "../../README.md"
 
 [dependencies]
 include-doc-macro = { workspace = true }
+
+[dev-dependencies]
+trybuild.workspace = true

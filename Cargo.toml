@@ -19,3 +19,4 @@ ra_ap_syntax = "0.0.164"
 itertools = "0.11.0"
 proc-macro2 = "1.0.50"
 xtask-base = { git = "https://github.com/simon-bourne/rust-xtask-base" }
+trybuild = "1.0.104"

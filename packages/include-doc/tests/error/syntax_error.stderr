@@ -1,0 +1,5 @@
+error: expected one of `!` or `::`, found `invalid`
+ --> tests/error/syntax_error.rs:1:6
+  |
+1 | Some invalid Rust syntax
+  |      ^^^^^^^ expected one of `!` or `::`

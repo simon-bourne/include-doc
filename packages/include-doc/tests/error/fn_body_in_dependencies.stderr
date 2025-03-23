@@ -1,0 +1,5 @@
+error: Function body can't be in dependencies
+ --> tests/error/fn_body_in_dependencies.rs:3:35
+  |
+3 | #[doc = function_body!("code.rs", function, [function])]
+  |                                   ^^^^^^^^

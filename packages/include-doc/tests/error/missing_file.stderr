@@ -1,0 +1,5 @@
+error: No such file or directory (os error 2)
+ --> tests/error/missing_file.rs:3:22
+  |
+3 | #[doc = source_file!("non_existant_file.rs")]
+  |                      ^^^^^^^^^^^^^^^^^^^^^^
