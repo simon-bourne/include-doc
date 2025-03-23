@@ -3,7 +3,7 @@ members = ["packages/*"]
 resolver = "2"
 
 [workspace.package]
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 authors = ["Simon Bourne <simonbourne@gmail.com>"]
@@ -11,7 +11,7 @@ homepage = "https://github.com/simon-bourne/include-doc"
 repository = "https://github.com/simon-bourne/include-doc"
 
 [workspace.dependencies]
-include-doc-macro = { version = "0.2.1", path = "packages/include-doc-macro" }
+include-doc-macro = { version = "0.2.2", path = "packages/include-doc-macro" }
 
 syn = "2.0.26"
 quote = "1.0.15"
