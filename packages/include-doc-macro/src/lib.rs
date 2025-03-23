@@ -1,9 +1,9 @@
 use std::{collections::HashSet, env, fmt::Display, fs, path::Path};
 
+use error::Tokens;
 use itertools::Itertools;
 use proc_macro::TokenStream;
 use proc_macro2::Span;
-use proc_macro_error::{abort, abort_call_site, proc_macro_error};
 use quote::quote;
 use ra_ap_syntax::{
     ast::{self, HasModuleItem, HasName, Type},
@@ -14,19 +14,31 @@ use syn::{
     parse::{Parse, ParseStream},
     parse_macro_input,
     token::Comma,
-    Ident, LitStr, Token,
+    Error, Ident, LitStr, Result, Token,
 };
 
-#[proc_macro]
-#[proc_macro_error]
-pub fn source_file(input: TokenStream) -> TokenStream {
-    let file: LitStr = parse_macro_input!(input);
+mod error;
 
-    doc_function_body(file, Ident::new("main", Span::call_site()), None)
+macro_rules! call_site_error {
+    ($($message:tt)*) => {
+        Err($crate::error::call_site(format!($($message)*)))
+    }
+}
+
+macro_rules! error {
+    ($span:expr, $($message:tt)*) => {
+        Err($crate::Error::new($span, format!($($message)*)))
+    }
 }
 
 #[proc_macro]
-#[proc_macro_error]
+pub fn source_file(input: TokenStream) -> TokenStream {
+    let file: LitStr = parse_macro_input!(input);
+
+    doc_function_body(file, Ident::new("main", Span::call_site()), None).tokens()
+}
+
+#[proc_macro]
 pub fn function_body(input: TokenStream) -> TokenStream {
     let args: FunctionBodyArgs = parse_macro_input!(input);
     let function_body = args.function_body.to_string();
@@ -35,10 +47,15 @@ pub fn function_body(input: TokenStream) -> TokenStream {
     dependencies.extend(args.dependencies.iter().map(Ident::to_string));
 
     if dependencies.contains(&function_body) {
-        abort_call_site!("Function body can't be in dependencies");
+        return Error::new(
+            args.function_body.span(),
+            "Function body can't be in dependencies",
+        )
+        .into_compile_error()
+        .into();
     }
 
-    doc_function_body(args.file, args.function_body, Some(&dependencies))
+    doc_function_body(args.file, args.function_body, Some(&dependencies)).tokens()
 }
 
 struct FunctionBodyArgs {
@@ -48,7 +65,7 @@ struct FunctionBodyArgs {
 }
 
 impl Parse for FunctionBodyArgs {
-    fn parse(input: ParseStream) -> syn::Result<Self> {
+    fn parse(input: ParseStream) -> Result<Self> {
         let file = input.parse()?;
         input.parse::<Comma>()?;
         let function_body = input.parse()?;
@@ -72,8 +89,8 @@ fn doc_function_body(
     file: LitStr,
     function_body_ident: Ident,
     deps: Option<&HashSet<String>>,
-) -> TokenStream {
-    let source = parse_file(&file);
+) -> Result<proc_macro2::TokenStream> {
+    let source = parse_file(&file)?;
 
     let mut found_body = false;
     let function_body = function_body_ident.to_string();
@@ -124,15 +141,15 @@ fn doc_function_body(
         let missing_deps = deps.difference(&track_deps).join(", ");
 
         if !missing_deps.is_empty() {
-            abort_call_site!("Not all dependencies were found: [{}]", missing_deps);
+            call_site_error!("Not all dependencies were found: [{missing_deps}]")?;
         }
     }
 
     if !found_body {
-        abort!(function_body_ident, "{} not found", function_body);
+        error!(function_body_ident.span(), "{function_body} not found")?;
     }
 
-    quote!(#doc).into()
+    Ok(quote!(#doc))
 }
 
 fn include_always<T: Display>(node: &T) -> Option<String> {
@@ -230,24 +247,24 @@ fn indent_size(text: &str) -> Option<usize> {
     }
 }
 
-fn parse_file(file_expr: &LitStr) -> SourceFile {
-    let source_code = read_file(file_expr);
+fn parse_file(file_expr: &LitStr) -> Result<SourceFile> {
+    let source_code = read_file(file_expr)?;
     let parse = SourceFile::parse(&source_code);
     let source = parse.tree();
 
     if !parse.errors().is_empty() {
-        abort!(file_expr, "Errors in source file");
+        error!(file_expr.span(), "Errors in source file")?;
     }
 
-    source
+    Ok(source)
 }
 
-fn read_file(file_expr: &LitStr) -> String {
+fn read_file(file_expr: &LitStr) -> Result<String> {
     let file = file_expr.value();
 
-    let dir = env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|e| abort_call_site!(e));
+    let dir = env::var("CARGO_MANIFEST_DIR").map_err(error::call_site)?;
     let path = Path::new(&dir).join(file);
-    fs::read_to_string(path).unwrap_or_else(|e| abort!(file_expr, e))
+    fs::read_to_string(path).map_err(|e| Error::new(file_expr.span(), e))
 }
 
 fn hide_in_doc(item: impl Display) -> String {
