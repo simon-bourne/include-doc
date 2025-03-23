@@ -1,4 +1,6 @@
 #[test]
+// Windows path errors have different wording
+#[cfg(not(target_os = "windows"))]
 fn syntax_error() {
     let t = trybuild::TestCases::new();
     // We can't test much more than this as `trybuild` creates a package in
